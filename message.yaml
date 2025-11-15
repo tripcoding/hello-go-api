@@ -1,0 +1,45 @@
+openapi: 3.0.3
+info:
+  title: Hello World API
+  description: A simple API to get a 'Hello, World!' message in different languages
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8080
+    description: Local Development servers
+
+paths:
+  /hello:
+    get:
+      summary: Retrieves a greeting
+      description: Returne a 'Hello, World!' message in a specified language. Defaults to english if the language is not specified or unsupported.
+      parameters:
+        - name: lang
+          in: query
+          description: The language code for the greeting.
+          required: false
+          schema:
+            type: string
+            enum: [en, pt, es, ru, ja]
+            default: en
+      responses:
+        '200':
+          description: A successful greeting
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Greeting'
+
+components:
+  schemas:
+    Greeting:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The greeting message
+          example: Hello, World!
+        language:
+          type: string
+          description: The language code used for the message
+          example: en
