@@ -1,0 +1,6 @@
+#compiled binary
+/hello-go-api
+
+#OS-specific files
+.DS_Store
+*.local
