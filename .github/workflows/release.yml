@@ -39,13 +39,13 @@ jobs:
           echo "Building version: $VERSION"
 
           # Build for Linux
-          GOOS=linux GOARCH=amd64 go build -a -ldflags="-s -w -X 'github.com/tripcoding/hello-go-api.version=$VERSION'" -o hello-api-linux-amd64 .
+          GOOS=linux GOARCH=amd64 go build -a -ldflags="-s -w -X github.com/tripcoding/hello-go-api.version=$VERSION" -o hello-api-linux-amd64 .
           
           # Build for Windows
-          GOOS=windows GOARCH=amd64 go build -a -ldflags="-s -w -X 'github.com/tripcoding/hello-go-api.version=$VERSION'" -o hello-api-windows-amd64.exe
+          GOOS=windows GOARCH=amd64 go build -a -ldflags="-s -w -X github.com/tripcoding/hello-go-api.version=$VERSION" -o hello-api-windows-amd64.exe
           
           # Build for macOS (Intel)
-          GOOS=darwin GOARCH=amd64 go build -a -ldflags="-s -w -X 'github.com/tripcoding/hello-go-api.version=$VERSION'" -o hello-api-darwin-amd64
+          GOOS=darwin GOARCH=amd64 go build -a -ldflags="-s -w -X github.com/tripcoding/hello-go-api.version=$VERSION" -o hello-api-darwin-amd64
 
       # --- Step 4: Create the GitHub Release and upload binaries ---
       - name: Create GitHub Release
