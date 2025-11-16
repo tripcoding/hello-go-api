@@ -6,6 +6,8 @@ import (
 	"net/http"
 )
 
+var version = "development"
+
 type Greeting struct {
 	Message  string `json:"message"`
 	Language string `json:"language"`
@@ -49,7 +51,7 @@ func helloHandler(w http.ResponseWriter, r *http.Request) {
 func main() {
 	http.HandleFunc("/hello", helloHandler)
 
-	log.Println("Starting server on :8080...")
+	log.Printf("Starting server on :8080 (version: %s)", version)
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)

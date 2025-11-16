@@ -1,0 +1,66 @@
+# A friendly name for your action, shown in the "Actions" tab
+name: Build and Release
+
+# This is the trigger:
+# It runs ONLY when you push a new tag that starts with 'v'
+# (e.g., v1.0.0, v1.1, v2.0-beta)
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-and-release:
+    # Use the latest Ubuntu runner
+    runs-on: ubuntu-latest
+    
+    # This gives the job permission to create a release and upload assets
+    permissions:
+      contents: write
+
+    steps:
+      # --- Step 1: Check out your repository code ---
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # --- Step 2: Set up the Go environment ---
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.25.x' # Use a specific Go version
+
+      # --- Step 3: Build your app for multiple platforms ---
+      - name: Build Go binaries
+        run: |
+          # This gets the version from the tag (e.g., "v1.0.1")
+          # This is the correct way to solve our versioning problem!
+          VERSION=${{ github.ref_name }}
+
+          echo "Building version: $VERSION"
+
+          # Build for Linux
+          GOOS=linux GOARCH=amd64 go build -a -ldflags="-s -w -X 'github.com/tripcoding/hello-go-api.version=$VERSION'" -o hello-api-linux-amd64 .
+          
+          # Build for Windows
+          GOOS=windows GOARCH=amd64 go build -a -ldflags="-s -w -X 'github.com/tripcoding/hello-go-api.version=$VERSION'" -o hello-api-windows-amd64.exe
+          
+          # Build for macOS (Intel)
+          GOOS=darwin GOARCH=amd64 go build -a -ldflags="-s -w -X 'github.com/tripcoding/hello-go-api.version=$VERSION'" -o hello-api-darwin-amd64
+
+      # --- Step 4: Create the GitHub Release and upload binaries ---
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          # This creates a title for the release page
+          name: Release ${{ github.ref_name }}
+          
+          # This will automatically create release notes based on
+          # your commit messages since the last tag.
+          generate_release_notes: true
+          
+          # This finds the files we just built and attaches them
+          # as download links.
+          files: |
+            hello-api-linux-amd64
+            hello-api-windows-amd64.exe
+            hello-api-darwin-amd64
