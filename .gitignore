@@ -1,5 +1,11 @@
 #compiled binary
 /hello-go-api
+/hello-api.exe
+
+# Binaries from the release script
+/hello-api-linux-amd64
+/hello-api-windows-amd64.exe
+/hello-api-darwin-amd64
 
 #OS-specific files
 .DS_Store
